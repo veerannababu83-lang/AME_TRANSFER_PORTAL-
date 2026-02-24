@@ -1,0 +1,250 @@
+<style>
+    :root {
+        --primary: #001b94; /* Indigo Blue */
+        --accent: #FFD700;  /* Gold */
+        --bg-light: #f7fafc; /* Very light background */
+        --white: #fff;
+        --gray: #e3e8f0;
+    }
+    body {
+        margin: 0;
+        min-height: 100vh;
+        background-color: #f8fafc;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    /* Hero Section */
+    .hero-section {
+        position: relative;
+        width: 100%;
+        height: 45vh; /* Reduced height to prevent scrolling */
+        min-height: 320px;
+        background: linear-gradient(135deg, #569be2 0%, #2b50a1 100%);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: white;
+    }
+    .bg-pattern {
+        position: absolute;
+        inset: 0;
+        opacity: 0.1;
+        background-image: radial-gradient(white 1px, transparent 1px);
+        background-size: 20px 20px;
+    }
+    .bg-stripe-pattern {
+        position: absolute;
+        inset: 0;
+        opacity: 0.05;
+        background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.1) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.1) 75%, transparent 75%, transparent);
+        background-size: 60px 60px;
+    }
+
+      img[src*="chatbot.gif"] {
+        display: none !important;
+    }
+    /* Hide HRGPT iframe */
+    #cx-iframe, .cx-iframe {
+        display: none !important;
+    }
+    /* Floating Icons */
+    .floating-icon { position: absolute; opacity: 0.1; color: white; }
+    .icon-plane { top: 25%; left: 0; width: 16rem; height: 16rem; animation: flyAcross 35s linear infinite; }
+    .icon-settings { bottom: -5rem; right: -5rem; width: 24rem; height: 24rem; animation: spinSlow 50s linear infinite; }
+    @keyframes flyAcross { 0% { transform: translate(-10%, 20px) rotate(-12deg); } 50% { transform: translate(50vw, -20px) rotate(-12deg); } 100% { transform: translate(110vw, 20px) rotate(-12deg); } }
+    @keyframes spinSlow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+    /* Hero Content */
+    .hero-content { position: relative; z-index: 10; max-width: 56rem; padding: 0 1rem; animation: fadeInUp 0.8s ease-out forwards; }
+    .badge { display: inline-block; padding: 0.375rem 1rem; border-radius: 9999px; background-color: rgba(255,255,255,0.1); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.2); color: #dbeafe; font-size: 0.875rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); margin-bottom: 1.5rem; }
+    .hero-title { font-size: 2.25rem; font-weight: 700; line-height: 1.1; margin-bottom: 1rem; text-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    .gradient-text { color: transparent; background-clip: text; -webkit-background-clip: text; background-image: linear-gradient(to right, white, #dbeafe, #ffd700); }
+    .subtitle-container { height: 3rem; overflow: hidden; margin-bottom: 1rem; }
+    .subtitle { font-size: 1rem; color: #dbeafe; font-weight: 500; display: block; animation: slideUpFade 3s infinite; }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes slideUpFade { 0%, 20% { opacity: 0; transform: translateY(20px); } 25%, 75% { opacity: 1; transform: translateY(0); } 80%, 100% { opacity: 0; transform: translateY(-20px); } }
+    @media (min-width: 768px) { .hero-section { height: 55vh; } .hero-title { font-size: 4.5rem; } .subtitle { font-size: 1.5rem; } }
+
+    /* Cards Section */
+    .cards-section { position: relative; z-index: 20; margin-top: -5rem; padding-bottom: 1rem; padding-left: 1rem; padding-right: 1rem; }
+    /* Force 2 columns on mobile (side-by-side) */
+    .cards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; max-width: 56rem; margin: 0 auto; }
+    @media (min-width: 768px) { .cards-grid { gap: 2rem; margin-top: -8rem; } }
+
+    /* Action Cards */
+    .action-card { background: white; border-radius: 0.75rem; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); padding: 1rem; position: relative; overflow: hidden; transition: all 0.3s ease; border: 1px solid rgba(255,255,255,0.5); display: flex; flex-direction: column; height: 100%; text-decoration: none; animation: fadeInUp 0.5s ease-out forwards; opacity: 0; }
+    .action-card:nth-child(1) { animation-delay: 0.2s; } .action-card:nth-child(2) { animation-delay: 0.3s; }
+    .action-card:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+    
+    .card-top-border { position: absolute; top: 0; left: 0; width: 100%; height: 4px; }
+    .border-blue { background-color: #2b50a1; } .border-gold { background-color: #d4a017; }
+    
+    .watermark-icon { position: absolute; right: -0.5rem; bottom: -0.5rem; width: 4rem; height: 4rem; color: #f9fafb; transform: rotate(-12deg); transition: transform 0.5s ease; pointer-events: none; }
+    .action-card:hover .watermark-icon { transform: rotate(-12deg) scale(1.1); }
+    
+    .card-content { position: relative; z-index: 10; display: flex; flex-direction: column; height: 100%; }
+    .icon-box { width: 2rem; height: 2rem; border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; margin-bottom: 0.5rem; transition: background-color 0.3s; }
+    .bg-blue-light { background-color: #eef2ff; } .bg-gold-light { background-color: #fefce8; }
+    .action-card:hover .bg-blue-light { background-color: #e0e7ff; } .action-card:hover .bg-gold-light { background-color: #fef9c3; }
+    
+    .card-title { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.25rem; line-height: 1.2; }
+    .text-blue { color: #2b50a1; } .text-gold { color: #d4a017; }
+    .card-desc { font-size: 0.7rem; color: #6b7280; margin-bottom: 0.5rem; flex-grow: 1; line-height: 1.3; }
+    @media (min-width: 768px) { 
+        .action-card { padding: 1.5rem; }
+        .card-title { font-size: 1.25rem; } 
+        .card-desc { font-size: 0.8rem; margin-bottom: 0.75rem; } 
+        .icon-box { width: 3rem; height: 3rem; margin-bottom: 0.75rem; } 
+        .watermark-icon { width: 8rem; height: 8rem; } 
+    }
+    
+    .card-link { display: inline-flex; align-items: center; font-size: 0.75rem; font-weight: 700; transition: color 0.3s; margin-top: auto; }
+    .card-link svg { margin-left: 0.25rem; width: 0.75rem; height: 0.75rem; transition: transform 0.3s; }
+    .action-card:hover .card-link svg { transform: translateX(4px); }
+    .hover-text-blue:hover { color: #1e3a8a; } .hover-text-gold:hover { color: #a16207; }
+    }
+    /* Hide 6E skai bot */
+    img[src*="chatbot.gif"],
+    .ms-SPLegacyFabricBlock,
+    .sp-placeholder-bottom,
+    div[data-sp-placeholder="Bottom"] {
+        display: none !important;
+    }
+    /* Hide HRGPT iframe */
+    #cx-iframe, .cx-iframe {
+        display: none !important;
+    }
+    /* Hide SharePoint Navigation & Chrome */
+    /* Removed #spCommandBar and .commandBarWrapper from hide list to keep Save button visible */
+    #suiteBarDelta, #s4-ribbonrow, #s4-titlerow, #sideNavBox, #spSiteHeader { display: none !important; }
+    /* Hide Focus Mode button */
+    button[data-automation-id="pageCommandBarFocusModeButton"] { display: none !important; }
+    #contentBox { margin-left: 0 !important; }
+    
+    /* Custom Header Styles */
+    .custom-header {
+        background-color: var(--primary);
+        color: var(--white);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        border-bottom: 4px solid var(--accent);
+        padding: 0;
+        height: 80px; /* Increased height */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .header-content {
+        width: 100%;
+        max-width: 1280px;
+        padding: 0 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 100%;
+    }
+    .brand-container { display: flex; align-items: center; text-decoration: none; color: white; }
+    .brand-container:hover .logo-circle { transform: rotate(45deg); }
+    .logo-circle {
+        background-color: white; padding: 8px; border-radius: 50%; margin-right: 12px;
+        display: flex; align-items: center; justify-content: center; transition: transform 0.3s;
+    }
+    .logo-icon { font-size: 20px; line-height: 1; color: var(--primary); }
+    .brand-text { display: flex; flex-direction: column; }
+    .brand-title { font-family: 'Segoe UI', sans-serif; font-weight: 700; font-size: 1.25rem; line-height: 1; letter-spacing: -0.025em; }
+    .brand-subtitle { font-family: monospace; font-size: 10px; color: #e0e7ff; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 4px; opacity: 0.8; }
+    
+    .nav-links { display: flex; gap: 2rem; height: 100%; }
+    .nav-item {
+        display: inline-flex; align-items: center; padding-top: 4px;
+        font-size: 0.875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
+        color: #e0e7ff; text-decoration: none; border-bottom: 2px solid transparent; transition: all 0.2s; height: 100%;
+    }
+    .nav-item:hover { color: white; border-bottom-color: rgba(255,255,255,0.5); }
+    .nav-item.active { color: var(--accent); border-bottom-color: var(--accent); }
+    .admin-gear { opacity: 0.6; font-size: 1.2rem; }
+    .admin-gear:hover { opacity: 1; }
+</style>
+<div class="custom-header">
+    <div class="header-content">
+        <a href="https://indigoin.sharepoint.com/sites/AMETransferPortal" class="brand-container">
+            <div class="logo-circle">
+                <span class="logo-icon">✈️</span>
+            </div>
+            <div class="brand-text">
+                <span class="brand-title">6E ENGG</span>
+                <span class="brand-subtitle">Transfer Portal</span>
+            </div>
+        </a>
+        <div class="nav-links">
+            <a href="https://indigoin.sharepoint.com/sites/AMETransferPortal" class="nav-item active">Home</a>
+            <a href="https://indigoin.sharepoint.com/sites/AMETransferPortal/SitePages/FORM_SUBMIT_PAGE.aspx" class="nav-item">Transfer Request</a>
+            <a href="https://indigoin.sharepoint.com/sites/AMETransferPortal/SitePages/TransferDashboard.aspx" class="nav-item">Rankings</a>
+        </div>
+    </div>
+</div>
+
+<!-- Hero Section -->
+<div class="hero-section">
+    <div class="bg-pattern"></div>
+    <div class="bg-stripe-pattern"></div>
+    <div class="hero-content">
+    
+        <h1 class="hero-title">Transfer <br /><span class="gradient-text">Portal</span></h1>
+        <div class="subtitle-container"><span class="subtitle" id="rotatingSubtitle">Submit your transfer requests easily</span></div>
+    </div>
+</div>
+
+<!-- Cards Section -->
+<div class="cards-section">
+    <div class="cards-grid">
+        <!-- Card 1: Submit Request -->
+        <a href="https://indigoin.sharepoint.com/sites/AMETransferPortal/SitePages/FORM_SUBMIT_PAGE.aspx" class="action-card">
+            <div class="card-top-border border-blue"></div>
+            <svg class="watermark-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+            <div class="card-content">
+                <div class="icon-box bg-blue-light">
+                    <svg class="text-blue" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+                </div>
+                <h3 class="card-title text-blue">Submit Request</h3>
+                <p class="card-desc">Apply for a base transfer or update existing details.</p>
+                <div class="card-link text-blue hover-text-blue">Proceed to Form <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+            </div>
+        </a>
+        <!-- Card 2: View Ranking -->
+        <a href="https://indigoin.sharepoint.com/sites/AMETransferPortal/SitePages/TransferDashboard.aspx" class="action-card">
+            <div class="card-top-border border-gold"></div>
+            <svg class="watermark-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
+            <div class="card-content">
+                <div class="icon-box bg-gold-light">
+                    <svg class="text-gold" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
+                </div>
+                <h3 class="card-title text-blue">View Ranking</h3>
+                <p class="card-desc">Check your current position in the queue.</p>
+                <div class="card-link text-gold hover-text-gold">Check Status <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+            </div>
+        </a>
+    </div>
+</div>
+
+<script>
+// Animated scrolling messages
+(function() {
+    const subtitles = [
+        'Submit your transfer requests easily',
+        'Track your ranking in real-time',
+        'Transparent & automated process'
+    ];
+    const subtitleEl = document.getElementById('rotatingSubtitle');
+    let idx = 0;
+    setInterval(() => {
+        idx = (idx + 1) % subtitles.length;
+        if(subtitleEl) subtitleEl.innerText = subtitles[idx];
+    }, 3000);
+})();
+</script>
