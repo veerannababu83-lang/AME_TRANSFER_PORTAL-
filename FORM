@@ -1,0 +1,684 @@
+<style>
+    body { background: #f8fafc; margin:0; font-family: 'Segoe UI', sans-serif; }
+    :root {
+        --primary: #2b50a1; /* Indigo Blue */
+        --accent: #FFD700;  /* Gold */
+        --white: #fff;
+    }
+    .portal-btn {
+        padding: 15px 30px;
+        border: none;
+        border-radius: 50px;
+        font-size: 1rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.3s;
+        text-decoration: none;
+        display: block;
+        box-shadow: 0 4px 15px rgba(43,80,161,0.08);
+    }
+    .portal-btn.primary {
+        background: var(--primary);
+        color: var(--white);
+        border: 2px solid var(--primary);
+    }
+    .portal-btn.secondary {
+        background: var(--white);
+        color: var(--primary);
+        border: 2px solid var(--primary);
+    }
+    .portal-btn:hover { transform: translateY(-3px); box-shadow: 0 6px 18px rgba(43,80,161,0.15); }
+    .portal-btn.primary:hover { background: #005a9e; border-color: #005a9e; }
+    .portal-btn.secondary:hover { background: #f0f4f8; }
+    #transferPortal {
+        background: #fff; max-width: 800px; margin: 32px auto; border-radius: 18px; box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+        padding: 0; font-family: 'Segoe UI', sans-serif; border: 1px solid #e3e8f0;
+        overflow: hidden;
+    }
+    
+    /* Header Styles */
+    .portal-header {
+        background: linear-gradient(135deg, #1e3a8a 0%, #2b50a1 100%);
+        padding: 2rem;
+        color: white;
+        position: relative;
+    }
+    #formTitle { color: white; text-align: left; margin: 0 0 0.5rem 0; font-size: 1.75rem; font-weight: 700; }
+    .header-subtitle { color: #dbeafe; font-size: 1rem; margin-bottom: 1.5rem; }
+    
+    #userBadge {
+        background: rgba(255,255,255,0.1); backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.2);
+        border-radius: 8px; padding: 0.75rem 1rem; display: inline-flex; flex-direction: column; gap: 0.25rem;
+        font-size: 0.85rem; color: #bfdbfe; width: auto; margin-bottom: 0;
+    }
+    #userBadge strong { color: white; }
+
+    /* Body & Section Styles */
+    .portal-body { padding: 2rem; }
+    
+    .form-section {
+        position: relative; padding-left: 2rem; border-left: 2px solid #dbeafe;
+        margin-bottom: 0; padding-bottom: 2.5rem;
+    }
+    .form-section:last-child { border-left-color: transparent; padding-bottom: 0; }
+    
+    .section-dot {
+        position: absolute; left: -9px; top: 0; width: 1rem; height: 1rem;
+        border-radius: 50%; background-color: #dbeafe; border: 2px solid white;
+        box-shadow: 0 0 0 1px #fff;
+    }
+    
+    .section-title {
+        font-size: 1.1rem; font-weight: 700; color: #111827; margin: 0 0 1.5rem 0;
+        display: flex; align-items: center;
+    }
+    
+    .step-badge {
+        background-color: #eff6ff; color: #2b50a1; padding: 0.25rem 0.75rem;
+        border-radius: 9999px; font-size: 0.75rem; font-weight: 700; margin-right: 0.75rem;
+        border: 1px solid #dbeafe; text-transform: uppercase; letter-spacing: 0.05em;
+    }
+
+    /* Grid & Inputs */
+    .grid-2 { display: grid; grid-template-columns: 1fr; gap: 1.25rem; }
+    .grid-3 { display: grid; grid-template-columns: 1fr; gap: 1.25rem; }
+    @media (min-width: 600px) {
+        .grid-2 { grid-template-columns: 1fr 1fr; }
+        .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+    }
+    
+    .form-group { width: 100%; margin-bottom: 0; }
+    .form-group label { font-size: 0.9rem; font-weight: 600; color: #4b5563; margin-bottom: 0.5rem; display: block; }
+    input, select, textarea {
+        width: 100%; padding: 0.75rem; border: 1px solid #e5e7eb; border-radius: 0.5rem;
+        font-size: 0.95rem; background: #f9fafb; box-sizing: border-box; transition: all 0.2s;
+    }
+    input:focus, select:focus, textarea:focus {
+        border-color: #2b50a1; background: #fff; outline: none;
+        box-shadow: 0 0 0 3px rgba(43, 80, 161, 0.1);
+    }
+
+    #finalSubmitBtn {
+        width: 100%; padding: 15px; background: linear-gradient(90deg, #0078d4 60%, #2b50a1 100%);
+        color: white; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: bold;
+        cursor: pointer; transition: 0.3s; margin-top: 1rem;
+    }
+    #finalSubmitBtn:hover { background: #005a9e; }
+    #statusMsg { text-align: center; font-weight: 600; margin-top: 18px; min-height: 24px; }
+    
+    @media (max-width: 700px) {
+        #transferPortal { margin: 10px; }
+        .portal-header, .portal-body { padding: 1.5rem; }
+    }
+    /* Hide 6E skai bot */
+    img[src*="chatbot.gif"] {
+        display: none !important;
+    }
+    /* Hide HRGPT iframe */
+    #cx-iframe, .cx-iframe {
+        display: none !important;
+    }
+    /* Hide SharePoint Navigation & Chrome */
+    #suiteBarDelta, #s4-ribbonrow, #s4-titlerow, #sideNavBox, #spSiteHeader { display: none !important; }
+    button[data-automation-id="pageCommandBarFocusModeButton"] { display: none !important; }
+    #contentBox { margin-left: 0 !important; }
+
+    /* Custom Header Styles */
+    .custom-header {
+        background-color: var(--primary);
+        color: var(--white);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        border-bottom: 4px solid var(--accent);
+        padding: 0;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .header-content {
+        width: 100%;
+        max-width: 1280px;
+        padding: 0 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 100%;
+    }
+    .brand-container { display: flex; align-items: center; text-decoration: none; color: white; }
+    .brand-container:hover .logo-circle { transform: rotate(45deg); }
+    .logo-circle {
+        background-color: white; padding: 8px; bordear-radius: 50%; margin-right: 12px;
+        display: flex; align-items: center; justify-content: center; transition: transform 0.3s;
+    }
+    .logo-icon { font-size: 20px; line-height: 1; color: var(--primary); }
+    .brand-text { display: flex; flex-direction: column; }
+    .brand-title { font-family: 'Segoe UI', sans-serif; font-weight: 700; font-size: 1.25rem; line-height: 1; letter-spacing: -0.025em; }
+    .brand-subtitle { font-family: monospace; font-size: 10px; color: #e0e7ff; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 4px; opacity: 0.8; }
+    
+    .nav-links { display: flex; gap: 2rem; height: 100%; }
+    .nav-item {
+        display: inline-flex; align-items: center; padding-top: 4px;
+        font-size: 0.875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
+        color: #e0e7ff; text-decoration: none; border-bottom: 2px solid transparent; transition: all 0.2s; height: 100%;
+    }
+    .nav-item:hover { color: white; border-bottom-color: rgba(255,255,255,0.5); }
+    .nav-item.active { color: var(--accent); border-bottom-color: var(--accent); }
+</style>
+
+<div class="custom-header">
+    <div class="header-content">
+        <a href="https://indigoin.sharepoint.com/sites/AMETransferPortal" class="brand-container">
+            <div class="logo-circle">
+                <span class="logo-icon">✈️</span>
+            </div>
+            <div class="brand-text">
+                <span class="brand-title">6E</span>
+                <span class="brand-subtitle">ENGINEERING AME Transfer Portal</span>
+            </div>
+        </a>
+        <div class="nav-links">
+            <a href="https://indigoin.sharepoint.com/sites/AMETransferPortal" class="nav-item">Home</a>
+            <a href="https://indigoin.sharepoint.com/sites/AMETransferPortal/SitePages/FORM_SUBMIT_PAGE.aspx" class="nav-item active">Transfer Request</a>
+            <a href="https://indigoin.sharepoint.com/sites/AMETransferPortal/SitePages/TransferDashboard.aspx" class="nav-item">Rankings</a>
+        </div>
+    </div>
+</div>
+
+<div id="transferPortal">
+    <!-- Header Section -->
+    <div class="portal-header">
+        <h2 id="formTitle">AME Transfer Portal</h2>
+        <div class="header-subtitle">Submit your details to apply for a base transfer.</div>
+        <div id="userBadge">
+            <span><strong>Logged in as:</strong> <span id="autoDispName">Detecting...</span></span>
+            <span><strong>Email:</strong> <span id="autoDispEmail">Detecting...</span></span>
+        </div>
+    </div>
+
+    <div class="portal-body">
+        <form id="mainForm" autocomplete="off">
+            
+            <!-- Step 1: Personal Details -->
+            <section class="form-section">
+                <div class="section-dot"></div>
+                <h3 class="section-title"><span class="step-badge">Step 1</span> Personal Details</h3>
+                <div class="grid-2">
+                    <div class="form-group"><label>IGA Number</label><input type="number" id="cIGA" min="1" step="1" placeholder="e.g. 12345"></div>
+                    <div class="form-group"><label>Mobile Number</label><input type="number" id="cMobile" placeholder="+91 98765 43210"></div>
+                    <div class="form-group"><label>Trade</label>
+                        <select id="cTrade"><option value="">--Select Trade--</option><option value="B1">B1</option><option value="B2">B2</option></select>
+                    </div>
+                    <div class="form-group"><label>Date of Joining IGO</label><input type="date" id="cJoinIGO"></div>
+                </div>
+            </section>
+
+            <!-- Step 2: Current Status -->
+            <section class="form-section">
+                <div class="section-dot"></div>
+                <h3 class="section-title"><span class="step-badge">Step 2</span> Current Status</h3>
+                <div class="grid-2">
+                    <div class="form-group"><label>Initial Inducted Base</label>
+                        <select id="cInductedBase"><option value="">--Select Base--</option></select>
+                    </div>
+                    <div class="form-group"><label>Current Base</label>
+                        <select id="cBase"><option value="">--Select Base--</option></select>
+                    </div>
+                    <div class="form-group"><label>Current Authorization</label>
+                        <select id="cAuth"><option value="">--Select Authorization--</option><option value="Transit">Transit</option><option value="CAT A">CAT A</option><option value="CAT A - Level 3">CAT A - Level 3</option><option value="Full Scope">Full Scope</option></select>
+                    </div>
+                    <div class="form-group"><label>Current Designation</label>
+                        <select id="cDesig"><option value="">--Select Designation--</option><option value="Trainee AME">Trainee AME</option><option value="AME">AME</option><option value="Senior AME">Senior AME</option><option value="Fleet Engineer">Fleet Engineer</option><option value="Manager">Manager</option><option value="Senior Manager">Senior Manager</option></select>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Step 3: Last Transfer Details -->
+            <section class="form-section">
+                <div class="section-dot"></div>
+                <h3 class="section-title"><span class="step-badge">Step 3</span> Last Transfer Details</h3>
+                <div class="grid-2">
+                    <div class="form-group"><label>From Base</label>
+                        <select id="cLastTransferFrom"><option value="">--From Base--</option></select>
+                    </div>
+                    <div class="form-group"><label>To Base</label>
+                        <select id="cLastTransferTo"><option value="">--To Base--</option></select>
+                    </div>
+                    <div class="form-group"><label>Transfer Date</label>
+                        <input type="date" id="cLastTransferDate">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Step 4: Transfer Preferences -->
+            <section class="form-section">
+                <div class="section-dot" style="background-color: #d4a017; border-color: #fff;"></div>
+                <h3 class="section-title"><span class="step-badge" style="background-color: #fefce8; color: #d4a017; border-color: #fef08a;">Step 4</span> Transfer Preferences</h3>
+                <div class="grid-3" style="margin-bottom: 1.5rem;">
+                    <div class="form-group"><label>Priority 1 (Mandatory)</label><select id="cP1"><option value="">--Select Base--</option></select></div>
+                    <div class="form-group"><label>Priority 2 (Optional)</label><select id="cP2"><option value="">--Select Base--</option></select></div>
+                    <div class="form-group"><label>Priority 3 (Optional)</label><select id="cP3"><option value="">--Select Base--</option></select></div>
+                </div>
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label>Transfer Type</label>
+                    <select id="cTransferType"><option value="">--Select Type--</option><option value="Company Requirement">Company Requirement</option><option value="Self Transfer">Self Transfer</option></select>
+                </div>
+                <div class="form-group">
+                    <label>Reason for Transfer Request</label>
+                    <textarea id="cReason" rows="4" placeholder="Please describe your reason for the transfer request..."></textarea>
+                </div>
+            </section>
+
+            <button type="submit" id="finalSubmitBtn">SUBMIT REQUEST</button>
+            <p id="statusMsg"></p>
+        </form>
+    </div>
+</div>
+
+<div id="successModal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); align-items: center; justify-content: center;">
+    <div id="successModalContent" style="background: white; padding: 30px; border-radius: 15px; text-align: center; max-width: 400px; width: 90%; margin: auto; box-shadow: 0 5px 15px rgba(0,0,0,0.3); opacity: 0; transform: scale(0.9); transition: all 0.3s ease-out;">
+        <div style="font-size: 72px; color: #28a745; line-height: 1;">&#10004;</div>
+        <h2 style="color: #2b50a1; margin-top: 20px; margin-bottom: 10px;">Success!</h2>
+        <p style="color: #333; margin-bottom: 30px;">Your request has been submitted successfully.</p>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+             <a href="https://indigoin.sharepoint.com/sites/AMETransferPortal/SitePages/TransferDashboard.aspx" class="portal-btn primary">View Your Ranking</a>
+            <button id="updateRequestBtn" class="portal-btn secondary">Edit Submission</button>
+        </div>
+    </div>
+</div>
+
+<script>
+(function() {
+    let targetItemId = null;
+    let internalMap = {};
+    let currentUserData = {};
+    let initialValues = { p1: "", p2: "", p3: "" };
+    const listGuid = "TRANSFER INFO";
+    const siteUrl = window.location.origin + "/sites/TRANSFERPORTAL";
+
+    const bases = ["AGR","AGX","AJL","AMD","ATQ","AYJ","BBI",
+    "BDQ","BEK","BHO","BKB","BLR","BLR-BMD","BOM","CCJ","CCU",
+    "CDP","CJB","CNN","COK","DBR","DED","DEL","DEL-BMD","DGH",
+    "DHM","DIB","DIU","DMU","GAU","GAY","GBP","GDB","GOI","GOP",
+    "GOX","GWL","HBX","HGI","HSR","HYD","IDR","IMF","ISK","IXA"
+    ,"IXB","IXC","IXD","IXE","IXG","IXJ","IXL","IXM","IXR","IXS",
+    "IXU","IXZ","JAI","JDH","JGB","JLR","JRH","KJB","KLH","KNU",
+    "KQH","KTM","LKO","MAA","MYQ","NAG","PAT","PNQ","PNY","RDP",
+    "RJA","RPR","RQY","SAG","SHL","STV","SXR","SXV","TCR","TIR",
+    "TRV","TRZ","UDR","VGA","VNS","VTZ"];
+
+    const loadPortal = async () => {
+        // Populate select dropdowns for bases
+        const baseDropdowns = ["cBase", "cP1", "cP2", "cP3", "cInductedBase", "cLastTransferFrom", "cLastTransferTo"];
+        baseDropdowns.forEach(id => {
+            const sel = document.getElementById(id);
+            if (!sel) return;
+            let label = '--Select Base--';
+            if (id === "cLastTransferFrom") label = '--From Base--';
+            if (id === "cLastTransferTo") label = '--To Base--';
+            sel.innerHTML = `<option value="">${label}</option>` + bases.map(b => `<option value="${b}">${b}</option>`).join('');
+        });
+
+        try {
+            const [uRes, fRes] = await Promise.all([
+                fetch(`${siteUrl}/_api/web/currentuser`, { headers: { "Accept": "application/json;odata=verbose" } }),
+                fetch(`${siteUrl}/_api/web/lists/getbytitle('${listGuid}')/fields?$filter=Hidden eq false`, { headers: { "Accept": "application/json;odata=verbose" } })
+            ]);
+
+            currentUserData = (await uRes.json()).d;
+            document.getElementById("autoDispName").innerText = currentUserData.Title;
+            document.getElementById("autoDispEmail").innerText = currentUserData.Email;
+
+            (await fRes.json()).d.results.forEach(f => { internalMap[f.Title] = f.InternalName; });
+
+            //const itemRes = await fetch(`${siteUrl}/_api/web/lists(guid'${listGuid}')/items?$filter=AuthorId eq ${currentUserData.Id}`, { headers: { "Accept": "application/json;odata=verbose" } });
+            const itemRes = await fetch(`${siteUrl}/_api/web/lists/getbytitle('${listGuid}')/items?$filter=Email eq '${currentUserData.Email}'`,{ headers: { "Accept": "application/json;odata=verbose" } });
+            const items = (await itemRes.json()).d.results;
+            
+            if (items.length > 0) {
+                const item = items[0];
+                targetItemId = item.Id;
+                document.getElementById("formTitle").innerText = "Update Your Transfer Request";
+                document.getElementById("finalSubmitBtn").innerText = "UPDATE MY DATA";
+                // Set Values only if internalMap has the field
+                if (document.getElementById("cIGA") && internalMap["IGA"]) document.getElementById("cIGA").value = item[internalMap["IGA"]] || "";
+                const mobKey = internalMap["Mobile"] || internalMap["Mobile Number"];
+                if (document.getElementById("cMobile") && mobKey) document.getElementById("cMobile").value = item[mobKey] || "";
+                if (document.getElementById("cTrade") && internalMap["TRADE"]) document.getElementById("cTrade").value = item[internalMap["TRADE"]] || "";
+                if (document.getElementById("cDesig") && internalMap["Current Designation"]) document.getElementById("cDesig").value = item[internalMap["Current Designation"]] || "";
+                if (document.getElementById("cBase") && internalMap["Current Base"]) document.getElementById("cBase").value = item[internalMap["Current Base"]] || "";
+                const p1Key = internalMap["Preferred Base (Priority 1)"] || internalMap["Preferred Base(Priority 1)"];
+                if (document.getElementById("cP1") && p1Key) document.getElementById("cP1").value = item[p1Key] || "";
+                const p2Key = internalMap["Preferred Base (Priority 2)"] || internalMap["Preferred Base(Priority 2)"];
+                if (document.getElementById("cP2") && p2Key) document.getElementById("cP2").value = item[p2Key] || "";
+                const p3Key = internalMap["Preferred Base (Priority 3)"] || internalMap["Preferred Base(Priority 3)"];
+                if (document.getElementById("cP3") && p3Key) document.getElementById("cP3").value = item[p3Key] || "";
+                
+                // Store initial values for change detection
+                initialValues.p1 = document.getElementById("cP1") ? document.getElementById("cP1").value : "";
+                initialValues.p2 = document.getElementById("cP2") ? document.getElementById("cP2").value : "";
+                initialValues.p3 = document.getElementById("cP3") ? document.getElementById("cP3").value : "";
+
+                if (document.getElementById("cJoinIGO") && internalMap["Date of Joining IGO"]) document.getElementById("cJoinIGO").value = item[internalMap["Date of Joining IGO"]] || "";
+                if (document.getElementById("cAuth") && internalMap["Current authorization"]) document.getElementById("cAuth").value = item[internalMap["Current authorization"]] || "";
+                if (document.getElementById("cInductedBase") && internalMap["Initial Inducted Base"]) document.getElementById("cInductedBase").value = item[internalMap["Initial Inducted Base"]] || "";
+                if (document.getElementById("cTransferType") && internalMap["TransferType"]) document.getElementById("cTransferType").value = item[internalMap["TransferType"]] || "";
+                if (document.getElementById("cReason") && internalMap["Reason for transfer request"]) document.getElementById("cReason").value = item[internalMap["Reason for transfer request"]] || "";
+                // Last transfer details: parse and set if present
+                if (document.getElementById("cLastTransferFrom") && document.getElementById("cLastTransferTo") && document.getElementById("cLastTransferDate") && internalMap["Last transfer details"]) {
+                    const ltd = item[internalMap["Last transfer details"]] || "";
+                    // Format: "YYYY-MM-DD | FROM → TO"
+                    const ltdParts = ltd.split("|");
+                    if (ltdParts.length === 2) {
+                        document.getElementById("cLastTransferDate").value = ltdParts[0].trim();
+                        const arrowParts = ltdParts[1].split("→");
+                        if (arrowParts.length === 2) {
+                            document.getElementById("cLastTransferFrom").value = arrowParts[0].trim();
+                            document.getElementById("cLastTransferTo").value = arrowParts[1].trim();
+                        }
+                    }
+                }
+            }
+        } catch (e) { console.error(e); }
+    };
+
+    // --- Helper Functions for HASH_LIST ---
+    const DESIGNATION_POINTS = {
+        "Senior Manager": 4, "Manager": 3.5, "Fleet Engineer": 3,
+        "Senior AME": 2, "AME": 1, "Trainee AME": 0.5
+    };
+
+    function getCertificateType(auth) {
+        if (!auth) return "";
+        if (auth === "Transit") return "Transit";
+        if (auth === "CAT A" || auth === "CAT A - Level 3") return "CAT A";
+        if (auth === "Full Scope") return "Full Scope";
+        return auth;
+    }
+
+    function getScore(desig, submissionDateStr) {
+        if (!desig) return 0;
+        const points = DESIGNATION_POINTS[desig] || 0;
+        
+        // Time Points Calculation based on Submission Date
+        // Formula: MIN(6, INT(DATEDIF(SubmissionDate, TODAY(), "m")/6)+1)
+        // Since this runs on submission, date is effectively today, so diff is 0.
+        // 0 months / 6 = 0. INT(0) + 1 = 1.
+        
+        let timePoints = 1;
+        if (submissionDateStr) {
+            const subDate = new Date(submissionDateStr);
+            const today = new Date();
+            // Calculate difference in months
+            let months = (today.getFullYear() - subDate.getFullYear()) * 12;
+            months -= subDate.getMonth();
+            months += today.getMonth();
+            if (today.getDate() < subDate.getDate()) {
+                months--;
+            }
+            months = Math.max(0, months); // Ensure no negative
+            
+            timePoints = Math.floor(months / 6) + 1;
+            if (timePoints > 6) timePoints = 6;
+        }
+        
+        return points + timePoints;
+    }
+
+    async function generateHashCode(email) {
+        const msgBuffer = new TextEncoder().encode(email.toLowerCase().trim());
+        const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+        // Take first 6 chars of hex string
+        return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('').substring(0, 6);
+    }
+    // --------------------------------------
+
+    const runSubmit = async (e) => {
+        e.preventDefault();
+        const status = document.getElementById("statusMsg");
+        status.innerText = "";
+
+        // Function to format date
+        const getFormattedDate = () => {
+            const d = new Date();
+            const month = d.toLocaleString('default', { month: 'short' });
+            return `${month} ${d.getDate()} ${d.getFullYear()}`;
+        };
+        // Only IGA is mandatory
+        const iga = document.getElementById("cIGA").value.trim();
+        if (!iga) {
+            status.innerText = "IGA Number is required.";
+            status.style.color = "#d32f2f";
+            return;
+        }
+        if (isNaN(Number(iga)) || Number(iga) < 1) {
+            status.innerText = "IGA Number must be a valid number.";
+            status.style.color = "#d32f2f";
+            return;
+        }
+        // All other fields are optional
+        const auth = document.getElementById("cAuth").value.trim();
+        const reason = document.getElementById("cReason").value.trim();
+        const joinIGO = document.getElementById("cJoinIGO").value;
+        const inductedBase = document.getElementById("cInductedBase").value;
+        const lastTransferFrom = document.getElementById("cLastTransferFrom").value;
+        const lastTransferTo = document.getElementById("cLastTransferTo").value;
+        const lastTransferDate = document.getElementById("cLastTransferDate").value;
+        const transferType = document.getElementById("cTransferType").value;
+        // Mobile number must be sent as a number (Edm.Double)
+        const mobile = document.getElementById("cMobile").value.trim();
+        const mobileVal = mobile ? Number(mobile) : null;
+        const trade = document.getElementById("cTrade").value;
+        const desig = document.getElementById("cDesig").value;
+        const base = document.getElementById("cBase").value;
+        const p1 = document.getElementById("cP1").value;
+        const p2 = document.getElementById("cP2").value;
+        const p3 = document.getElementById("cP3").value;
+        status.innerText = "Syncing with Database...";
+        status.style.color = "#0078d4";
+        try {
+            const contextRes = await fetch(`${siteUrl}/_api/contextinfo`, { method: "POST", headers: { "Accept": "application/json;odata=verbose" } });
+            const digest = (await contextRes.json()).d.GetContextWebInformation.FormDigestValue;
+            const headers = { "Accept": "application/json;odata=verbose", "Content-Type": "application/json;odata=verbose", "X-RequestDigest": digest };
+            if (targetItemId) { headers["X-HTTP-Method"] = "MERGE"; headers["IF-MATCH"] = "*"; }
+            const payload = { "__metadata": { "type": "SP.Data.TRANSFER_x0020_INFOListItem" } };
+            // ...existing code...
+            if (internalMap["IGA"]) payload[internalMap["IGA"]] = iga;
+            // Mobile Number must be sent as a number (Edm.Double)
+            const mobPayloadKey = internalMap["Mobile"] || internalMap["Mobile Number"];
+            if (mobPayloadKey && mobileVal !== null && !isNaN(mobileVal)) payload[mobPayloadKey] = mobileVal;
+            if (internalMap["TRADE"]) payload[internalMap["TRADE"]] = trade;
+            if (internalMap["Date of Joining IGO"]) payload[internalMap["Date of Joining IGO"]] = joinIGO;
+            if (internalMap["Current Designation"]) payload[internalMap["Current Designation"]] = desig;
+            if (internalMap["Current authorization"]) payload[internalMap["Current authorization"]] = auth;
+            if (internalMap["Initial Inducted Base"]) payload[internalMap["Initial Inducted Base"]] = inductedBase;
+            if (internalMap["Last transfer details"]) payload[internalMap["Last transfer details"]] = `${lastTransferDate} | ${lastTransferFrom} → ${lastTransferTo}`;
+            if (internalMap["TransferType"]) payload[internalMap["TransferType"]] = transferType;
+            if (internalMap["Reason for transfer request"]) payload[internalMap["Reason for transfer request"]] = reason;
+            if (internalMap["Employee Name"]) payload[internalMap["Employee Name"]] = currentUserData.Title;
+            payload["Email"] = currentUserData.Email;
+            
+            const hashCode = await generateHashCode(currentUserData.Email);
+            if (internalMap["HashCode"]) payload[internalMap["HashCode"]] = hashCode;
+
+            const todayStr = getFormattedDate();
+            // Save Main Submission Date
+            if (internalMap["SubmissionDate"]) payload[internalMap["SubmissionDate"]] = todayStr;
+
+            // Save Priority Specific Submission Dates (Only if changed or new)
+            // We check for both "SubmissionDatePriority1" AND "Submission Date Priority 1" to be safe
+            const sd1Key = internalMap["SubmissionDatePriority1"] || internalMap["Submission Date Priority 1"];
+            if (sd1Key && p1 && (!targetItemId || p1 !== initialValues.p1)) {
+                payload[sd1Key] = todayStr;
+            }
+            const sd2Key = internalMap["SubmissionDatePriority2"] || internalMap["Submission Date Priority 2"];
+            if (sd2Key && p2 && (!targetItemId || p2 !== initialValues.p2)) {
+                payload[sd2Key] = todayStr;
+            }
+            const sd3Key = internalMap["SubmissionDatePriority3"] || internalMap["Submission Date Priority 3"];
+            if (sd3Key && p3 && (!targetItemId || p3 !== initialValues.p3)) {
+                payload[sd3Key] = todayStr;
+            }
+
+            if (internalMap["Current Base"]) payload[internalMap["Current Base"]] = base;
+            const p1PayloadKey = internalMap["Preferred Base (Priority 1)"] || internalMap["Preferred Base(Priority 1)"];
+            if (p1PayloadKey) payload[p1PayloadKey] = p1;
+            
+            const p2PayloadKey = internalMap["Preferred Base (Priority 2)"] || internalMap["Preferred Base(Priority 2)"];
+            if (p2PayloadKey) payload[p2PayloadKey] = p2;
+            
+            const p3PayloadKey = internalMap["Preferred Base (Priority 3)"] || internalMap["Preferred Base(Priority 3)"];
+            if (p3PayloadKey) payload[p3PayloadKey] = p3;
+
+            const response = await fetch(targetItemId ? `${siteUrl}/_api/web/lists/getbytitle('${listGuid}')/items(${targetItemId})` : `${siteUrl}/_api/web/lists/getbytitle('${listGuid}')/items`, {
+                method: "POST", headers, body: JSON.stringify(payload)
+            });
+            if (response.ok) {
+                document.getElementById('mainForm').style.display = 'none';
+                document.getElementById('userBadge').style.display = 'none';
+                document.getElementById('formTitle').style.display = 'none';
+                status.style.display = 'none';
+                const modal = document.getElementById('successModal');
+                const modalContent = document.getElementById('successModalContent');
+                modal.style.display = 'flex';
+                
+                // CRITICAL FIX: Update initialValues to match the data we just saved
+                // This prevents the dates from updating again if the user clicks submit a second time
+                initialValues.p1 = p1;
+                initialValues.p2 = p2;
+                initialValues.p3 = p3;
+
+                setTimeout(() => {
+                    modalContent.style.opacity = '1';
+                    modalContent.style.transform = 'scale(1)';
+                }, 10);
+                // Refresh item after update to get latest dates for HASH_LIST sync
+                let updatedItem = null;
+                try {
+                    const itemRes = await fetch(`${siteUrl}/_api/web/lists/getbytitle('${listGuid}')/items?$filter=Email eq '${currentUserData.Email}'`, { headers: { "Accept": "application/json;odata=verbose" } });
+                    const items = (await itemRes.json()).d.results;
+                    if (items.length > 0) {
+                        updatedItem = items[0];
+                        targetItemId = updatedItem.Id;
+                    }
+                } catch (e) { /* ignore refresh error */ }
+
+                // --- SYNC TO HASH_LIST ---
+                try {
+                    console.log("--- Starting HASH_LIST Sync ---");
+                    const score = getScore(desig, todayStr);
+                    const cert = getCertificateType(auth);
+                    const hashListName = "HASH_LIST"; // Ensure this matches your list name exactly
+                    console.log(`Calculated Score: ${score}, Certificate: ${cert}, HashCode: ${hashCode}`);
+
+                    // 0. Fetch HASH_LIST Metadata & Fields to get correct Internal Names
+                    const [hashListMetaRes, hashFieldsRes] = await Promise.all([
+                        fetch(`${siteUrl}/_api/web/lists/getbytitle('${hashListName}')?$select=ListItemEntityTypeFullName`, { headers: { "Accept": "application/json;odata=verbose" } }),
+                        fetch(`${siteUrl}/_api/web/lists/getbytitle('${hashListName}')/fields?$filter=Hidden eq false`, { headers: { "Accept": "application/json;odata=verbose" } })
+                    ]);
+
+                    let hashListType = "SP.Data.HASH_x005f_LISTListItem";
+                    if (hashListMetaRes.ok) hashListType = (await hashListMetaRes.json()).d.ListItemEntityTypeFullName;
+
+                    const hashInternalMap = {};
+                    if (hashFieldsRes.ok) (await hashFieldsRes.json()).d.results.forEach(f => { hashInternalMap[f.Title] = f.InternalName; });
+                    console.log("HASH_LIST Fields Map:", hashInternalMap);
+
+                    const getHashInternal = (name) => {
+                        if (hashInternalMap[name]) return hashInternalMap[name];
+                        if (name === "HashCode" && hashInternalMap["Title"]) return "Title"; // Common fallback: HashCode is often Title
+                        return name;
+                    };
+
+                    // 1. Delete existing entries (using correct internal name for HashCode)
+                    const existingRes = await fetch(`${siteUrl}/_api/web/lists/getbytitle('${hashListName}')/items?$filter=${getHashInternal("HashCode")} eq '${hashCode}'`, { headers: { "Accept": "application/json;odata=verbose" } });
+                    if (existingRes.ok) {
+                        const existingItems = (await existingRes.json()).d.results;
+                        console.log(`Found ${existingItems.length} existing items in HASH_LIST to delete.`);
+                        for (const item of existingItems) {
+                            const deleteRes = await fetch(`${siteUrl}/_api/web/lists/getbytitle('${hashListName}')/items(${item.Id})`, {
+                                method: "POST",
+                                headers: { "X-RequestDigest": digest, "IF-MATCH": "*", "X-HTTP-Method": "DELETE" }
+                            });
+                            if (!deleteRes.ok) {
+                                console.error(`Failed to delete item ${item.Id}. Status: ${deleteRes.status}`);
+                            }
+                        }
+                    } else {
+                        console.warn("Could not check for existing items. The 'Get items' request failed.");
+                    }
+
+                    // 2. Create new entries for each priority
+                    console.log("Preparing to create new items...");
+                    const sd1Key = internalMap["SubmissionDatePriority1"] || internalMap["Submission Date Priority 1"];
+                    const sd2Key = internalMap["SubmissionDatePriority2"] || internalMap["Submission Date Priority 2"];
+                    const sd3Key = internalMap["SubmissionDatePriority3"] || internalMap["Submission Date Priority 3"];
+
+                    const priorities = [ { base: p1, pNo: 1, dateKey: sd1Key }, { base: p2, pNo: 2, dateKey: sd2Key }, { base: p3, pNo: 3, dateKey: sd3Key } ];
+
+                    for (const p of priorities) {
+                        if (p.base && p.base !== "") {
+                            const pDate = (updatedItem && updatedItem[p.dateKey]) ? updatedItem[p.dateKey] : todayStr;
+                            
+                            const hashPayload = {
+                                "__metadata": { "type": hashListType }
+                            };
+                            hashPayload[getHashInternal("HashCode")] = hashCode;
+                            hashPayload[getHashInternal("Base")] = p.base;
+                            hashPayload[getHashInternal("P_No")] = String(p.pNo); // Send as String
+                            hashPayload[getHashInternal("Count")] = String(score); // Send as String
+                            hashPayload[getHashInternal("CC")] = cert;
+                            hashPayload[getHashInternal("SubmissionDate")] = pDate;
+
+                            console.log("Creating item with payload:", JSON.stringify(hashPayload, null, 2));
+                            const createRes = await fetch(`${siteUrl}/_api/web/lists/getbytitle('${hashListName}')/items`, {
+                                method: "POST",
+                                headers: { "Accept": "application/json;odata=verbose", "Content-Type": "application/json;odata=verbose", "X-RequestDigest": digest },
+                                body: JSON.stringify(hashPayload)
+                            });
+                            if (createRes.ok) {
+                                console.log(`HASH_LIST Sync OK for: ${p.base}`);
+                            } else {
+                                const errorJson = await createRes.json();
+                                console.error(`HASH_LIST FAILED for ${p.base}:`, errorJson.error.message.value);
+                            }
+                        }
+                    }
+                } catch (e) {
+                    console.error("--- HASH_LIST Sync CRITICAL FAIL ---");
+                    console.error("The sync process failed entirely. Error:", e);
+                    alert("A critical error occurred during the HASH_LIST sync. Check the console (F12) for details.");
+                }
+            } else {
+                const err = await response.json();
+                status.innerText = "Error: " + err.error.message.value;
+                status.style.color = "#d32f2f";
+            }
+        } catch (err) {
+            status.innerText = "Submit Error: " + err.message;
+            status.style.color = "#d32f2f";
+        }
+    };
+
+    const bind = () => {
+        const form = document.getElementById("mainForm");
+        if (form) {
+            form.addEventListener("submit", runSubmit);
+            loadPortal();
+            document.getElementById('updateRequestBtn').addEventListener('click', () => {
+                document.getElementById('successModal').style.display = 'none';
+                document.getElementById('mainForm').style.display = '';
+                document.getElementById('userBadge').style.display = '';
+                document.getElementById('formTitle').style.display = '';
+                document.getElementById('statusMsg').style.display = '';
+                document.getElementById('statusMsg').innerText = '';
+                document.getElementById("formTitle").innerText = "Update Your Transfer Request";
+                document.getElementById("finalSubmitBtn").innerText = "UPDATE MY DATA";
+            });
+        } else { setTimeout(bind, 500); }
+    };
+    bind();
+})();
+</script>
