@@ -27,6 +27,7 @@
         justify-content: center;
         text-align: center;
         color: white;
+        padding-bottom: 6rem;
     }
     .bg-pattern {
         position: absolute;
@@ -185,6 +186,7 @@
             <a href="https://indigoin.sharepoint.com/sites/AMETransferPortal" class="nav-item active">Home</a>
             <a href="https://indigoin.sharepoint.com/sites/AMETransferPortal/SitePages/FORM_SUBMIT_PAGE.aspx" class="nav-item">Transfer Request</a>
             <a href="https://indigoin.sharepoint.com/sites/AMETransferPortal/SitePages/TransferDashboard.aspx" class="nav-item">Rankings</a>
+            <a href="https://indigoin.sharepoint.com/sites/AMETransferPortal/SitePages/FAQ.aspx" class="nav-item">FAQ</a>
         </div>
     </div>
 </div>
