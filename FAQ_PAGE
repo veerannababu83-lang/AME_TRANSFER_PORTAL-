@@ -1,0 +1,244 @@
+<style>
+    :root {
+        --primary: #2b50a1; /* Indigo Blue */
+        --accent: #FFD700;  /* Gold */
+        --white: #fff;
+        --bg-light: #f8fafc;
+    }
+    body {
+        margin: 0;
+        background-color: var(--bg-light);
+        font-family: 'Segoe UI', sans-serif;
+        color: #333;
+    }
+
+    /* Custom Header Styles (Consistent with other pages) */
+    .custom-header {
+        background-color: var(--primary);
+        color: var(--white);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        border-bottom: 4px solid var(--accent);
+        padding: 0;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .header-content {
+        width: 100%;
+        max-width: 1280px;
+        padding: 0 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 100%;
+    }
+    .brand-container { display: flex; align-items: center; text-decoration: none; color: white; }
+    .brand-container:hover .logo-circle { transform: rotate(45deg); }
+    .logo-circle {
+        background-color: white; padding: 8px; border-radius: 50%; margin-right: 12px;
+        display: flex; align-items: center; justify-content: center; transition: transform 0.3s;
+    }
+    .logo-icon { font-size: 20px; line-height: 1; color: var(--primary); }
+    .brand-text { display: flex; flex-direction: column; }
+    .brand-title { font-family: 'Segoe UI', sans-serif; font-weight: 700; font-size: 1.25rem; line-height: 1; letter-spacing: -0.025em; }
+    .brand-subtitle { font-family: monospace; font-size: 10px; color: #e0e7ff; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 4px; opacity: 0.8; }
+    
+    .nav-links { display: flex; gap: 2rem; height: 100%; }
+    .nav-item {
+        display: inline-flex; align-items: center; padding-top: 4px;
+        font-size: 0.875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
+        color: #e0e7ff; text-decoration: none; border-bottom: 2px solid transparent; transition: all 0.2s; height: 100%;
+    }
+    .nav-item:hover { color: white; border-bottom-color: rgba(255,255,255,0.5); }
+    .nav-item.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+    /* FAQ Container */
+    .faq-container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
+
+    .page-title {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+    .page-title h1 {
+        color: var(--primary);
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+    }
+    .page-title p {
+        color: #666;
+        font-size: 1.1rem;
+    }
+
+    /* FAQ List Styles */
+    .faq-list {
+        list-style: none;
+        padding-left: 0;
+    }
+
+   .faq-item {
+        background: white;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        padding: 25px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        border: 1px solid #e5e7eb;
+    }
+
+    .faq-question {
+        font-weight: 700;
+        color: var(--primary);
+        font-size: 1.2rem;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: flex-start;
+    }
+
+    .faq-question-number {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #9ca3af;
+        margin-right: 15px;
+        line-height: 1.5;
+    }
+
+    .faq-answer {
+        color: #4b5563;
+        line-height: 1.7;
+        padding-left: 33px; /* Align with question text */
+    }
+
+    .faq-answer p {
+        margin-top: 0;
+        margin-bottom: 1em;
+    }
+
+    .faq-answer ul {
+        padding-left: 20px;
+        margin-top: 0.5em;
+        margin-bottom: 1em;
+    }
+    .faq-answer li {
+        margin-bottom: 0.5em;
+    }
+    
+    /* Scoring Table in FAQ */
+    .score-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+        font-size: 0.9rem;
+    }
+    .score-table th, .score-table td {
+        border: 1px solid #e5e7eb;
+        padding: 8px 12px;
+        text-align: left;
+    }
+    .score-table th {
+        background-color: #eff6ff;
+        color: var(--primary);
+    }
+
+    #suiteBarDelta, #s4-ribbonrow, #s4-titlerow, #sideNavBox, #spSiteHeader { display: none !important; }
+    button[data-automation-id="pageCommandBarFocusModeButton"] { display: none !important; }
+    #contentBox { margin-left: 0 !important; }
+    img[src*="chatbot.gif"] { display: none !important; }
+</style>
+
+<!-- Navigation Bar -->
+<div class="custom-header">
+    <div class="header-content">
+        <a href="https://indigoin.sharepoint.com/sites/AMETransferPortal" class="brand-container">
+            <div class="logo-circle"><span class="logo-icon">✈️</span></div>
+            <div class="brand-text">
+                <span class="brand-title">6E ENGG</span>
+                <span class="brand-subtitle">Transfer Portal</span>
+            </div>
+        </a>
+        <div class="nav-links">
+            <a href="https://indigoin.sharepoint.com/sites/AMETransferPortal" class="nav-item">Home</a>
+            <a href="https://indigoin.sharepoint.com/sites/AMETransferPortal/SitePages/FORM_SUBMIT_PAGE.aspx" class="nav-item">Transfer Request</a>
+            <a href="https://indigoin.sharepoint.com/sites/AMETransferPortal/SitePages/TransferDashboard.aspx" class="nav-item">Rankings</a>
+            <a href="#" class="nav-item active">FAQ</a>
+        </div>
+    </div>
+</div>
+
+<div class="faq-container">
+    <div class="page-title">
+        <h1>Frequently Asked Questions</h1>
+        <p>Quick answers to questions you may have.</p>
+    </div>
+
+    <div class="faq-list">
+        <!-- Question 1 -->
+        <div class="faq-item">
+            <div class="faq-question"><span class="faq-question-number">1.</span>Why do I have three options for base selection?</div>
+            <div class="faq-answer">
+                <p>Providing up to three base preferences increases your chances of a successful transfer. <strong>Priority 1 is your mandatory, most-desired base.</strong> Priorities 2 and 3 are optional but recommended. The system creates a separate ranking for you at each base you select, giving you more opportunities if a vacancy opens at one of your other choices.</p>
+            </div>
+        </div>
+
+        <!-- Question 2 -->
+        <div class="faq-item">
+            <div class="faq-question"><span class="faq-question-number">2.</span>How often can I change the priority?</div>
+            <div class="faq-answer">
+                <p>You can update your request, including your base priorities, at any time by visiting the "Transfer Request" page. The form will pre-fill with your saved data. Simply make your changes and click "UPDATE MY DATA".</p>
+            </div>
+        </div>
+
+        <!-- Question 3 -->
+        <div class="faq-item">
+            <div class="faq-question"><span class="faq-question-number">3.</span>What happens if I change my priority base?</div>
+            <div class="faq-answer">
+                <p><strong>This is a very important action.</strong> When you change a base in any of your priorities (e.g., changing Priority 1 from Delhi to Mumbai), the <strong>"Submission Date" for that specific priority is reset to the current date.</strong> Since this date is a key factor in your ranking, changing a base will affect your position in the queue for that new base.</p>
+            </div>
+        </div>
+
+        <!-- Question 4 -->
+        <div class="faq-item">
+            <div class="faq-question"><span class="faq-question-number">4.</span>How is my ranking score calculated?</div>
+            <div class="faq-answer">
+                <p>The ranking process follows a specific order:</p>
+                <ul>
+                    <li><strong>1. Authorization Bucket:</strong> First, you are grouped based on your Authorization Type (e.g., CAT A, Full Scope). You are ranked <em>only</em> against others in the same bucket.</li>
+                    <li><strong>2. Calculation:</strong> Inside that bucket, your score is calculated using:
+                        <ul>
+                            <li><strong>Seniority:</strong> Points based on your designation.</li>
+                            <li><strong>Submission Date:</strong> Points based on how early you applied.</li>
+                        </ul>
+                    </li>
+                </ul>
+                <p>The final formula is: <strong>Score = Seniority + Submission Date</strong></p>
+            </div>
+        </div>
+
+        <!-- Question 5 -->
+        <div class="faq-item">
+            <div class="faq-question"><span class="faq-question-number">5.</span>Is the ranking different for each base?</div>
+            <div class="faq-answer">
+                <p><strong>Yes, absolutely.</strong> A separate ranking list is maintained for each base and for each Authorization Type within that base.</p>
+                <p>For example, the ranking for 'Delhi - CAT A' is completely independent of the ranking for 'Mumbai - CAT A' or 'Delhi - Full Scope'. Your rank shows your position only against other employees who have requested the same base and have the same Authorization Type.</p>
+            </div>
+        </div>
+
+        <!-- Question 6 -->
+        <div class="faq-item">
+            <div class="faq-question"><span class="faq-question-number">6.</span>Why am I seeing your transfer is freezed?</div>
+            <div class="faq-answer">
+                <p>As per company policy, employees are subject to a 3-year cool-down period after a transfer has been completed. If your last transfer was within the last three years, you will not be eligible to apply for another transfer until this period is over. The system will automatically prevent submission if you are within this period.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // No script needed for this static layout
+</script>
